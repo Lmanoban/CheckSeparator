@@ -145,17 +145,17 @@ Screen:
                             id: tab2
                             name: 'tab2'
                             text: f"[size=20][font={fonts[-1]['fn_regular']}]{md_icons['table-large']}[/size][/font] Table"
-                            
+
                         Tab:
                             id: tab3
                             name: 'tab3'
                             text: f"[size=20][font={fonts[-1]['fn_regular']}]{md_icons['chart-areaspline']}[/size][/font] Graph"
-                            
+
                         Tab:
                             id: tab4
                             name: 'tab4'
                             text: f"[size=20][font={fonts[-1]['fn_regular']}]{md_icons['chart-pie']}[/size][/font] Chart"
-                            
+
                         Tab:
                             id: tab5
                             name: 'tab5'
