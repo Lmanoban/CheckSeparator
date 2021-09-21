@@ -20,6 +20,7 @@ from kivymd.uix.picker import MDDatePicker
 import datetime
 # import calendar
 import os
+import webbrowser
 
 KV = '''
 # https://stackoverflow.com/questions/65698145/kivymd-tab-name-containing-icons-and-text
@@ -43,9 +44,10 @@ KV = '''
     orientation: "vertical"
     padding: "8dp"
     spacing: "8dp"
+    
 
     AnchorLayout:
-        anchor_x: "left"
+        anchor_x: "center"
         size_hint_y: None
         height: avatar.height
 
@@ -56,17 +58,57 @@ KV = '''
             source: "data/logo/526.png"
 
     MDLabel:
+        halign: "center"
         text: app.title
         font_style: "Button"
         size_hint_y: None
         height: self.texture_size[1]
 
     MDLabel:
+        halign: "center"
         text: app.by_who
         font_style: "Caption"
         size_hint_y: None
         height: self.texture_size[1]
-
+        
+    AnchorLayout:
+        anchor_x: "center"
+        size_hint_y: None
+        height: avatar.height    
+        
+        MDIconButton:
+            icon: "account-cowboy-hat"
+            user_font_size: "30sp"
+            on_release: app.author_link()
+        
+    MDLabel:
+        halign: "center"
+        orientation: 'horizontal'
+        text: "About Author"
+        font_style: "Caption"
+        size_hint_y: None
+        height: self.texture_size[1]
+        
+    AnchorLayout:
+        anchor_x: "center"
+        size_hint_y: None
+        height: avatar.height    
+        
+        MDIconButton:
+            icon: "github"
+            user_font_size: "30sp"
+            on_release: app.code_link()
+        
+    MDLabel:
+        halign: "center"
+        orientation: 'horizontal'
+        text: "Source Code"
+        font_style: "Caption"
+        size_hint_y: None
+        height: self.texture_size[1]
+        
+    
+        
     ScrollView:
 
         DrawerList:
@@ -233,7 +275,7 @@ Screen:
                                         
         MDNavigationDrawer:
             id: nav_drawer
-
+            
             ContentNavigationDrawer:
                 id: content_drawer
                 
@@ -366,16 +408,15 @@ class CheckSeparatorApp(MDApp):
         self.screen.ids.name.text = "Name"
         self.screen.ids.cash.text = "0"
         self.save_in_cache_date()
-
-        icons_item_menu_lines = {
-            "account-cowboy-hat": "About author",
-            "github": "Source code",
-        }
-        for icon_name in icons_item_menu_lines.keys():
-            self.root.ids.content_drawer.ids.md_list.add_widget(
-                ItemDrawer(icon=icon_name,
-                           text=icons_item_menu_lines[icon_name])
+        self.screen.ids.table_list.add_widget(
+            ItemTable(
+                color=(0.2, 0.2, 0.2, 0.2),
+                num="№",
+                name="Name",
+                res_sum="Сумма",
+                percent="Процент от счета",
             )
+        )
 
     def calc_table(self, *args):
         """Сложение
@@ -501,6 +542,15 @@ class CheckSeparatorApp(MDApp):
         peoples = 1
         result_sum = 0
         sum_of_check = 0
+        self.screen.ids.table_list.add_widget(
+            ItemTable(
+                color=(0.2, 0.2, 0.2, 0.2),
+                num="№",
+                name="Name",
+                res_sum="Сумма",
+                percent="Процент от счета",
+            )
+        )
 
     def save_in_cache(self):
         name_of_people = self.screen.ids.name.text
@@ -515,6 +565,11 @@ class CheckSeparatorApp(MDApp):
             inf.write(f"{per_cent:.1f}%"+"\n")
 
     def save_in_cache_zero(self):
+        """Запись данных
+
+        Записывает данны полученные во время использования в файл cache.txt.
+
+        """
         name_of_people = self.screen.ids.name.text
         with open("cache.txt", "r+") as inf:
             inf.seek(0, 2)
@@ -523,16 +578,28 @@ class CheckSeparatorApp(MDApp):
             inf.write(str(result_sum) + "\n")
 
     def save_in_cache_date(self):
+        """Запись даты
+
+        Записывает дату запуска приложения в файл cache.txt.
+
+        """
         with open("cache.txt", "r+") as inf:
             inf.seek(0, 2)
             inf.write(self.screen.ids.start_date.text+"\n")
 
     def read_cache_doc(self):
-        # with open("cache.txt") as inf:
-        #     inf.read()
-        # my_file = open("cache.txt")
-        # return my_file
+        """Чтение cach'a
+
+        Вызывает файл cache.txt в отдельное окно.
+
+        """
         os.system("start " + "cache.txt")
+
+    def author_link(self):
+        webbrowser.open("https://github.com/Lmanoban", new=2)
+
+    def code_link(self):
+        webbrowser.open("https://github.com/Lmanoban/CheckSeparator", new=2)
 
 
 CheckSeparatorApp().run()
